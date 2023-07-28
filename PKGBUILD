@@ -6,9 +6,6 @@
 #_plugin_feedreader='true'
 #_plugin_voip='true'
 
-# Set this to 'true' to enable the new automatically generated jsaon api
-_jsonapi='true'
-
 # Set this to 'true' to enable auto login
 #_autologin='true'
 
@@ -29,17 +26,17 @@ _nativ_dialogs='true'
 
 _pkgname=retroshare
 pkgname=${_pkgname}-git
-pkgver=v0.6.6.r573.g1474dfdd6
-pkgrel=1
+pkgver=v0.6.7.RC1.r34.g4867d39
+pkgrel=2
 pkgdesc="Serverless encrypted instant messenger with filesharing, chatgroups, e-mail."
 arch=('i686' 'x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://retroshare.cc/'
 license=('GPL' 'LGPL')
 depends=('qt5-multimedia' 'qt5-x11extras' 'miniupnpc' 'libxss' 'libmicrohttpd' 'xapian-core')
-makedepends=('git' 'qt5-tools' 'rapidjson' 'cmake')
+makedepends=('git' 'qt5-base' 'rapidjson' 'cmake' 'doxygen')
 optdepends=('tor: tor hidden node support'
             'i2p: i2p hidden node support'
-            'i2pd: i2p hidden node support' )
+            'i2pd: i2p hidden node support')
 provides=("${_pkgname}")
 conflicts=("${_pkgname}")
 
@@ -64,18 +61,15 @@ _optSql=''
 # Add missing dependencies if needed
 [[ "$_plugin_voip" == 'true' ]] && depends=(${depends[@]} 'ffmpeg' 'opencv')
 [[ "$_plugin_feedreader" == 'true' ]] && depends=(${depends[@]} 'curl' 'libxslt')
-[[ "$_jsonapi" == 'true' ]] && makedepends=(${makedepends[@]} 'cmake' 'doxygen')
 [[ "$_clang" == 'true' ]] && makedepends=(${makedepends[@]} 'clang')
 [[ "$_autologin" == 'true' ]] && depends=(${depends[@]} 'libsecret')
 
 # Set options for qmake
-_optJsonapi=''
 _optClang=''
 _optAutol=''
 _optPlugin=''
 _optWiki=''
 _optNativDialogs=''
-[[ "$_jsonapi" == 'true' ]] && _optJsonapi='CONFIG+=rs_jsonapi'
 [[ "$_clang" == 'true' ]] && _optClang='-spec linux-clang'
 [[ "$_autologin" == 'true' ]] && _optAutol='CONFIG+=rs_autologin'
 [[ "$_nativ_dialogs" == 'true' ]] && _optNativDialogs='CONFIG*=rs_use_native_dialogs'
@@ -108,7 +102,7 @@ build() {
 #	rmdir supportlibs/restbed/include || true
 #	rmdir /tmp/makepkg/retroshare-git/src/retroshare/supportlibs/cmark/build/src && /tmp/makepkg/retroshare-git/src/retroshare/supportlibs/cmark/build || true
 
-	qmake   CONFIG-=debug CONFIG+=release 'RS_UPNP_LIB=miniupnpc'\
+	qmake CONFIG-=debug CONFIG+=release 'RS_UPNP_LIB=miniupnpc'\
 		${_optSql} \
 		${_optAutol} ${_optClang} \
 		${_optNativDialogs} \
